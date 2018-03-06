@@ -1,4 +1,4 @@
-baseurl = "/www.josephtpowers.com"
+baseurl = "www.josephtpowers.com/"
 languageCode = "en-us"
 title = "Data Sciencing, Woodworking, and Cooking"
 theme = "hugo-future-imperfect"
@@ -10,9 +10,9 @@ pluralizeListTitles = false
 
 [params]
   # Sets the meta tag description
-  description          = "A website sharing my knowledge (and misadventures) of the crafts I love."
+  description          = "just another website on data science, furniture making, and cooking"
   # Sets the navbarTitle that appears in the top left of the navigation bar
-  navbarTitle          = "Future Imperfect"
+  navbarTitle          = ""
   # Sets where "View More Posts" links
   viewMorePostLink     = "/blog/"
 
@@ -84,11 +84,11 @@ pluralizeListTitles = false
   # These are optional params related to the sidebar. They are recommended, but not
   # required for proper functionality. HTML is supported within the params.
 [params.intro]
-  header    = "Hugo Future Imperfect"
+  header    = "Joseph T Powers"
 
-  paragraph = "Another fine responsive site template by <a href=\"http://html5up.net\">HTML5 UP</a>. Ported by Julio Pescador with some extra goodies <i class='fa fa-hand-peace-o'></i>"
+  paragraph = "A website sharing insights and misadventures<br>in the crafts I love."
 
-  about     = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tellus lacus, auctor vehicula molestie quis, tempor quis velit. Quisque in quam ac leo efficitur vulputate. Phasellus ullamcorper aliquam sodales. Maecenas sit amet condimentum ipsum. Proin sit amet ligula elit. Mauris."
+  about     = "I am a data science in People Analytics at Genentech. In my free time I am an avid furniture maker and cook."
 
   # This appears at the top of the sidebar above params.intro.header.
   # A width of less than 100px is recommended from a design perspective.

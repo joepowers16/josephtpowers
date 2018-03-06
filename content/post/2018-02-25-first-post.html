@@ -1,0 +1,21 @@
+---
+title: First post
+author: Joe Powers
+date: '2018-02-25'
+slug: first-post
+categories:
+  - R
+tags:
+  - geom_sf
+  - maps
+---
+
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre class="r"><code>mtcars %&gt;% 
+  ggplot(aes(x = wt, y = mpg)) + 
+    geom_point() + 
+    geom_smooth()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39;</code></pre>
+<p><img src="/www.josephtpowers.com/post/2018-02-25-first-post_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>

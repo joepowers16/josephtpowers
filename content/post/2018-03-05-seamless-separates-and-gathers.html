@@ -1,0 +1,207 @@
+---
+title: For seamless spreads and gathers, add IDs while data are wide.
+author: Joe Powers
+date: '2018-03-05'
+slug: seamless-spreads-and-gathers
+categories:
+  - tidyr
+tags:
+  - separate
+  - gather
+  - tidy data
+  - tidyr
+---
+
+
+
+<pre class="r"><code>knitr::opts_chunk$set(error = TRUE)</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(magrittr)</code></pre>
+<p>During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the <code>gather()</code> and <code>spread()</code> functions of <code>tidyr</code>.</p>
+<p>Frequently I would encounter this error message after trying to <code>spread</code> some data that previously <code>gathered</code> without issue: “Error: Duplicate identifiers for rows …”.</p>
+<p>I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.</p>
+<p>Let’s start by taking some familiar data and making it very small for demo purposes. I’ll call the small dataset mt_wide to contrast it with its long form, mt_long that it will transition to shortly.</p>
+<pre class="r"><code>mt_wide &lt;- 
+  mtcars %&gt;% 
+  rownames_to_column(&quot;model&quot;) %&gt;% 
+  filter(str_detect(model, &quot;Fiat|Toyota&quot;)) %&gt;% 
+  select(model, mpg, cyl) %&gt;% 
+  arrange(model)
+
+mt_wide</code></pre>
+<pre><code>##            model  mpg cyl
+## 1       Fiat 128 32.4   4
+## 2      Fiat X1-9 27.3   4
+## 3 Toyota Corolla 33.9   4
+## 4  Toyota Corona 21.5   4</code></pre>
+<p>These data will gather() and spread() seemlessly because there is a unique model value for each row.</p>
+<pre class="r"><code># gather data into long format
+mt_long &lt;- 
+  mt_wide %&gt;% 
+  gather(mpg, cyl, key = measure, value = value)
+
+mt_long</code></pre>
+<pre><code>##            model measure value
+## 1       Fiat 128     mpg  32.4
+## 2      Fiat X1-9     mpg  27.3
+## 3 Toyota Corolla     mpg  33.9
+## 4  Toyota Corona     mpg  21.5
+## 5       Fiat 128     cyl   4.0
+## 6      Fiat X1-9     cyl   4.0
+## 7 Toyota Corolla     cyl   4.0
+## 8  Toyota Corona     cyl   4.0</code></pre>
+<pre class="r"><code># spread long data back to wide format
+mt_wide &lt;- 
+  mt_long %&gt;% 
+  spread(key = measure, value = value)
+
+mt_wide</code></pre>
+<pre><code>##            model cyl  mpg
+## 1       Fiat 128   4 32.4
+## 2      Fiat X1-9   4 27.3
+## 3 Toyota Corolla   4 33.9
+## 4  Toyota Corona   4 21.5</code></pre>
+<p>Likewise these next data will gather() and spread() seemlessly because there is a unique combination of values among the variables not being spread, namely <code>brand</code> and <code>model</code>.</p>
+<pre class="r"><code>mt_wide &lt;- 
+  mt_wide %&gt;% 
+  separate(model, into = c(&quot;brand&quot;, &quot;model&quot;), extra = &quot;merge&quot;) %&gt;%
+  select(brand, model, mpg, cyl) %&gt;% 
+  arrange(brand)
+
+mt_wide</code></pre>
+<pre><code>##    brand   model  mpg cyl
+## 1   Fiat     128 32.4   4
+## 2   Fiat    X1-9 27.3   4
+## 3 Toyota Corolla 33.9   4
+## 4 Toyota  Corona 21.5   4</code></pre>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  gather(mpg, cyl, key = measure, value = value)
+
+mt_long</code></pre>
+<pre><code>##    brand   model measure value
+## 1   Fiat     128     mpg  32.4
+## 2   Fiat    X1-9     mpg  27.3
+## 3 Toyota Corolla     mpg  33.9
+## 4 Toyota  Corona     mpg  21.5
+## 5   Fiat     128     cyl   4.0
+## 6   Fiat    X1-9     cyl   4.0
+## 7 Toyota Corolla     cyl   4.0
+## 8 Toyota  Corona     cyl   4.0</code></pre>
+<pre class="r"><code>mt_wide &lt;- 
+  mt_long %&gt;% 
+  spread(key = measure, value = value)
+
+mt_wide</code></pre>
+<pre><code>##    brand   model cyl  mpg
+## 1   Fiat     128   4 32.4
+## 2   Fiat    X1-9   4 27.3
+## 3 Toyota Corolla   4 33.9
+## 4 Toyota  Corona   4 21.5</code></pre>
+<p>We run into trouble when we lack a means of identifying unique rows. To demonstrate I’ll drop the model variable so that rows lack a unique identifier.</p>
+<pre class="r"><code>mt_wide %&lt;&gt;% 
+  select(-model)
+
+mt_wide</code></pre>
+<pre><code>##    brand cyl  mpg
+## 1   Fiat   4 32.4
+## 2   Fiat   4 27.3
+## 3 Toyota   4 33.9
+## 4 Toyota   4 21.5</code></pre>
+<p>The data <code>gather()</code> just fine …</p>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  gather(mpg, cyl, key = measure, value = value) %&gt;% 
+  arrange(brand)
+
+mt_long</code></pre>
+<pre><code>##    brand measure value
+## 1   Fiat     mpg  32.4
+## 2   Fiat     mpg  27.3
+## 3   Fiat     cyl   4.0
+## 4   Fiat     cyl   4.0
+## 5 Toyota     mpg  33.9
+## 6 Toyota     mpg  21.5
+## 7 Toyota     cyl   4.0
+## 8 Toyota     cyl   4.0</code></pre>
+<p>… but attempts to <code>spread()</code> this data back out to a wide format are not so smooth:</p>
+<pre class="r"><code>mt_wide &lt;- 
+  mt_long %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>## Error: Duplicate identifiers for rows (3, 4), (7, 8), (1, 2), (5, 6)</code></pre>
+<p>This “Error: Duplicate identifiers for rows …”, results from the data lacking unique identifiers to aggregate upon during the spread. For instance, in its current long state, how would the <code>spread()</code> function know which Toyota to associate cylinder and mpg values with? Clearly an additional identifier is needed, but importantly, the identifier needs to have been added or be already present when the data were in their <em>wide</em> format–before you used the <code>gather()</code> function. Adding unique identifiers once the data are in long format is too late.</p>
+<p>This order of operations can be confusing, because while the error message appears when you try to <code>spread()</code> long data, the solution requires you to go back two steps and add unique identifiers while the data are still wide.</p>
+<p>Adding a unique identifier while the data were in wide format allows the data to <code>gather()</code> and <code>spread()</code> seamlessly.</p>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  # add unique identifier
+  mutate(id = 1:n()) %&gt;% 
+  gather(mpg:cyl, key = measure, value = value) 
+
+mt_long</code></pre>
+<pre><code>##    brand id measure value
+## 1   Fiat  1     mpg  32.4
+## 2   Fiat  2     mpg  27.3
+## 3 Toyota  3     mpg  33.9
+## 4 Toyota  4     mpg  21.5
+## 5   Fiat  1     cyl   4.0
+## 6   Fiat  2     cyl   4.0
+## 7 Toyota  3     cyl   4.0
+## 8 Toyota  4     cyl   4.0</code></pre>
+<pre class="r"><code>mt_long %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>##    brand id cyl  mpg
+## 1   Fiat  1   4 32.4
+## 2   Fiat  2   4 27.3
+## 3 Toyota  3   4 33.9
+## 4 Toyota  4   4 21.5</code></pre>
+<div id="unique-identifiers-can-also-be-added-within-groups" class="section level3">
+<h3>Unique identifiers can also be added within groups</h3>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  # add unique identifier
+  group_by(brand) %&gt;% 
+    mutate(id = 1:n()) %&gt;% 
+  ungroup() %&gt;% 
+  gather(mpg:cyl, key = measure, value = value) 
+
+mt_long</code></pre>
+<pre><code>## # A tibble: 8 x 4
+##   brand     id measure value
+##   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+## 1 Fiat       1 mpg     32.4 
+## 2 Fiat       2 mpg     27.3 
+## 3 Toyota     1 mpg     33.9 
+## 4 Toyota     2 mpg     21.5 
+## 5 Fiat       1 cyl      4.00
+## 6 Fiat       2 cyl      4.00
+## 7 Toyota     1 cyl      4.00
+## 8 Toyota     2 cyl      4.00</code></pre>
+<pre class="r"><code>mt_long %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   brand     id   cyl   mpg
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Fiat       1  4.00  32.4
+## 2 Fiat       2  4.00  27.3
+## 3 Toyota     1  4.00  33.9
+## 4 Toyota     2  4.00  21.5</code></pre>
+</div>
+<div id="sparse-data-example" class="section level3">
+<h3>Sparse data example</h3>
+<p>Adding rownumbers after the data are long will enable the <code>spread</code>, but will also result in sparse data, which you don’t want.</p>
+<pre class="r"><code>mt_long %&gt;% 
+  mutate(id = 1:n()) %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>## # A tibble: 8 x 4
+##   brand     id   cyl   mpg
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Fiat       1 NA     32.4
+## 2 Fiat       2 NA     27.3
+## 3 Fiat       5  4.00  NA  
+## 4 Fiat       6  4.00  NA  
+## 5 Toyota     3 NA     33.9
+## 6 Toyota     4 NA     21.5
+## 7 Toyota     7  4.00  NA  
+## 8 Toyota     8  4.00  NA</code></pre>
+</div>

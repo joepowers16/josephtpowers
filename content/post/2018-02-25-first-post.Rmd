@@ -10,3 +10,15 @@ tags:
   - maps
 ---
 
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+```{r}
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg)) + 
+    geom_point() + 
+    geom_smooth()
+```
+
+
