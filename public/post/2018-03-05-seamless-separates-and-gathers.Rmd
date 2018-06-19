@@ -1,0 +1,151 @@
+---
+title: For seamless spreads and gathers, add IDs while data are wide.
+author: Joe Powers
+date: '2018-03-05'
+slug: seamless-spreads-and-gathers
+categories:
+  - tidyr
+tags:
+  - separate
+  - gather
+  - tidy data
+  - tidyr
+---
+
+During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the `gather()` and `spread()` functions of `tidyr`. Sometimes I encounter an error message after trying to `spread` data that previously `gathered` without issue: "Error: Duplicate identifiers for rows ...".
+
+I'll attempt to clarify the conditions that give rise to this error so that you can resolve it.
+
+Let's start by taking some familiar data and making it very small for demo purposes. I'll call the small dataset mt_wide to contrast it with its long form, mt_long, that it will transition to shortly. 
+
+```{r setup, cache=FALSE, echo=TRUE, message=FALSE}
+# allow error messages to print in html output
+knitr::opts_chunk$set(error = TRUE)
+
+library(tidyverse)
+library(magrittr)
+```
+
+```{r create small data set, warning=FALSE, message=FALSE}
+mt_wide <- 
+  mtcars %>% 
+  rownames_to_column("model") %>% 
+  filter(str_detect(model, "Fiat|Toyota")) %>% 
+  select(model, mpg, cyl) %>% 
+  arrange(model)
+
+mt_wide
+```
+
+These data will gather() and spread() seemlessly because there is a unique model value for each row. 
+```{r}
+# gather data into long format
+mt_long <- 
+  mt_wide %>% 
+  gather(mpg, cyl, key = measure, value = value)
+
+mt_long
+
+# spread long data back to wide format
+mt_wide <- 
+  mt_long %>% 
+  spread(key = measure, value = value)
+
+mt_wide
+```
+
+Likewise these next data will gather() and spread() seemlessly because there is a unique combination of values among the variables not being spread, namely `brand` and `model`. 
+```{r}
+mt_wide <- 
+  mt_wide %>% 
+  separate(model, into = c("brand", "model"), extra = "merge") %>%
+  select(brand, model, mpg, cyl) %>% 
+  arrange(brand)
+
+mt_wide
+```
+
+```{r}
+mt_long <- 
+  mt_wide %>% 
+  gather(mpg, cyl, key = measure, value = value)
+
+mt_long
+
+mt_wide <- 
+  mt_long %>% 
+  spread(key = measure, value = value)
+
+mt_wide
+```
+
+We run into trouble when we lack a means of identifying unique rows. To demonstrate I'll drop the model variable so that rows lack a unique identifier. 
+```{r}
+mt_wide %<>% 
+  select(-model)
+
+mt_wide
+```
+
+The data `gather()` just fine ...
+```{r}
+mt_long <- 
+  mt_wide %>% 
+  gather(mpg, cyl, key = measure, value = value) %>% 
+  arrange(brand)
+
+mt_long
+```
+
+... but attempts to `spread()` this data back out to a wide format are not so smooth: 
+```{r}
+mt_wide <- 
+  mt_long %>% 
+  spread(key = measure, value = value)
+```
+
+This "Error: Duplicate identifiers for rows ...", results from the data lacking unique identifiers to aggregate upon during the spread. For instance, in its current long state, how would the `spread()` function know which Toyota to associate cylinder and mpg values with? Clearly an additional identifier is needed, but importantly, the identifier needs to have been added or be already present when the data were in their *wide* format--before you used the `gather()` function. Adding unique identifiers once the data are in long format is too late. 
+
+This order of operations can be confusing, because while the error message appears when you try to `spread()` long data, the solution requires you to go back two steps and add unique identifiers while the data are still wide.
+
+Adding a unique identifier while the data were in wide format allows the data to `gather()` and `spread()` seamlessly.
+```{r}
+mt_long <- 
+  mt_wide %>% 
+  # add unique identifier
+  mutate(id = 1:n()) %>% 
+  gather(mpg:cyl, key = measure, value = value) 
+
+mt_long
+```
+
+```{r}
+mt_long %>% 
+  spread(key = measure, value = value)
+```
+
+### Unique identifiers can also be added within groups
+```{r}
+mt_long <- 
+  mt_wide %>% 
+  # add unique identifier
+  group_by(brand) %>% 
+    mutate(id = 1:n()) %>% 
+  ungroup() %>% 
+  gather(mpg:cyl, key = measure, value = value) 
+
+mt_long
+```
+
+```{r}
+mt_long %>% 
+  spread(key = measure, value = value)
+```
+
+### Sparse data example
+Adding rownumbers after the data are long will enable the `spread`, but will also result in sparse data, which you don't want. 
+```{r}
+mt_long %>% 
+  mutate(id = 1:n()) %>% 
+  spread(key = measure, value = value)
+```

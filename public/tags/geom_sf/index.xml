@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Geom_sf on Data Sciencing, Woodworking, and Cooking</title>
+    <link>/www.josephtpowers.com/tags/geom_sf/</link>
+    <description>Recent content in Geom_sf on Data Sciencing, Woodworking, and Cooking</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 25 Feb 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/www.josephtpowers.com/tags/geom_sf/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>First post</title>
+      <link>/www.josephtpowers.com/post/first-post/</link>
+      <pubDate>Sun, 25 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/www.josephtpowers.com/post/first-post/</guid>
+      <description>library(tidyverse) mtcars %&amp;gt;% ggplot(aes(x = wt, y = mpg)) + geom_point() + geom_smooth() ## `geom_smooth()` using method = &amp;#39;loess&amp;#39; </description>
+    </item>
+    
+  </channel>
+</rss>

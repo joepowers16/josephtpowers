@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on Data Sciencing, Woodworking, and Cooking</title>
+    <link>/www.josephtpowers.com/categories/r/</link>
+    <description>Recent content in R on Data Sciencing, Woodworking, and Cooking</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 28 Feb 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/www.josephtpowers.com/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Grafting</title>
+      <link>/www.josephtpowers.com/post/grafting/</link>
+      <pubDate>Wed, 28 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/www.josephtpowers.com/post/grafting/</guid>
+      <description>Document motives and process for grafting data to itself.</description>
+    </item>
+    
+    <item>
+      <title>Housing Affordability in the Bay Area</title>
+      <link>/www.josephtpowers.com/post/housing-affordability-in-the-bay-area/</link>
+      <pubDate>Wed, 28 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/www.josephtpowers.com/post/housing-affordability-in-the-bay-area/</guid>
+      <description>Explore ability of Genentech families to afford housing in Bay Area.</description>
+    </item>
+    
+    <item>
+      <title>First post</title>
+      <link>/www.josephtpowers.com/post/first-post/</link>
+      <pubDate>Sun, 25 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/www.josephtpowers.com/post/first-post/</guid>
+      <description>library(tidyverse) mtcars %&amp;gt;% ggplot(aes(x = wt, y = mpg)) + geom_point() + geom_smooth() ## `geom_smooth()` using method = &amp;#39;loess&amp;#39; </description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>/www.josephtpowers.com/blog/2015-07-23-r-rmarkdown/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>/www.josephtpowers.com/blog/2015-07-23-r-rmarkdown/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+  </channel>
+</rss>

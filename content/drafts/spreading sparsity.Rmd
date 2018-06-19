@@ -1,0 +1,101 @@
+---
+title: "Spreading sparsity demo"
+author: "Joe Powers"
+date: "3/9/2018"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(magrittr)
+```
+
+Github example:
+```{r}
+mpgs <- 
+  mpg %>% 
+  group_by(model) %>% 
+    arrange(year) %>% 
+    slice(1) %>% 
+  ungroup() %>% 
+  arrange(trans) %>% 
+  slice(1:2) %>% 
+  select(model, cyl, displ, year)
+```
+
+```{r}
+# clean gather/spread with all vars
+mpgs %>% 
+  gather(cyl:year, key = item, value = measure) %>% 
+  spread(key = item, value = measure)
+```
+
+```{r}
+# clean gather/spread: in this case the ungathered var does not casuse a problem
+mpgs %>% 
+  gather(cyl:displ, key = item, value = measure) %>% 
+  spread(key = item, value = measure)
+```
+
+```{r}
+# Even when a uniform vs varied variable are excluded it still works. 
+mpg %>% 
+  group_by(model) %>% 
+    arrange(year) %>% 
+    slice(1) %>% 
+  ungroup() %>% 
+  arrange(trans) %>% 
+  slice(1:2) %>% 
+  select(model, cyl, displ, year, hwy) %>% 
+  gather(cyl:displ, key = item, value = measure) %>% 
+  spread(key = item, value = measure)
+```
+
+What makes my data go sparse? 
+```{r}
+ds %>% 
+  spread(key = date_type, value = comparatio) %>% 
+  select(case_id, yr.qtr_pre:yr.qtr_q12, sal_midpt_pre) 
+  # so the sparsity is introduced by the spread()
+```
+
+```{r}
+# What variable triggers a sparse spread? yr.qtr. Why? b/c...
+ds %>% 
+  select(case_id, date_type, comparatio, yr.qtr) %>% 
+  spread(key = date_type, value = comparatio) %>% 
+  nrow()
+```
+
+```{r}
+# yr.qtr has a unque value for each row, so it cannot aggregate into a single value per each condensed row. 
+ds %>% 
+  select(case_id, date_type, comparatio, yr.qtr) %>% 
+  spread(key = date_type, value = comparatio) 
+```
+
+Spread() will introduce sparsity unless all variables *not* being spread are constant within the level of aggregation. 
+
+How does spread() know what the level of aggregation is for starters? 
+```{r}
+dss <- ds %>% 
+  filter(
+    case_id %in% c("c_1", "c_2"),
+    date_type %in% c("yr.qtr_pre", "yr.qtr_q4")
+  ) %>% 
+  select(case_id, date_type, comparatio, yr.qtr, sal_midpt_pre) 
+```
+
+```{r}
+# Sparse spread disaster
+dss %>% 
+  select(-sal_midpt_pre) %>% 
+  spread(key = date_type, value = comparatio) 
+```
+
+```{r}
+# clean spread
+dss %>% 
+  select(-yr.qtr) %>% 
+  spread(key = date_type, value = comparatio) 
+```

@@ -1,0 +1,1389 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>For seamless spreads and gathers, add IDs while data are wide.</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.36.1" />
+        
+
+
+        
+            <meta name="author" content="Joe Powers">
+        
+        
+            
+                <meta name="description" content="just another website on data science, furniture making, and cooking">
+            
+        
+
+        <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="For seamless spreads and gathers, add IDs while data are wide."/>
+<meta name="twitter:description" content="During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr. Sometimes I encounter an error message after trying to spread data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
+I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.
+Let’s start by taking some familiar data and making it very small for demo purposes."/>
+<meta name="twitter:site" content="@example"/>
+
+        <meta property="og:title" content="For seamless spreads and gathers, add IDs while data are wide." />
+<meta property="og:description" content="During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr. Sometimes I encounter an error message after trying to spread data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
+I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.
+Let’s start by taking some familiar data and making it very small for demo purposes." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/www.josephtpowers.com/post/seamless-spreads-and-gathers/" />
+
+
+
+<meta property="article:published_time" content="2018-03-05T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-03-05T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+        <meta property="og:image" content="/www.josephtpowers.com//images/logo.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="512">
+        <meta property="og:image:height" content="512">
+        
+<meta itemprop="name" content="For seamless spreads and gathers, add IDs while data are wide.">
+<meta itemprop="description" content="During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr. Sometimes I encounter an error message after trying to spread data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
+I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.
+Let’s start by taking some familiar data and making it very small for demo purposes.">
+
+
+<meta itemprop="datePublished" content="2018-03-05T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-03-05T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1141">
+
+
+
+<meta itemprop="keywords" content="separate,gather,tidy data,tidyr," />
+
+        
+
+        
+            
+        
+
+        
+        
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,800,900|Source+Sans+Pro:400,700">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.css">
+            <link rel="stylesheet" href="/www.josephtpowers.com/css/main.css">
+            <link rel="stylesheet" href="/www.josephtpowers.com/css/add-on.css">
+            <link rel="stylesheet" href="/www.josephtpowers.com/css/academicons.min.css">
+        
+
+        
+            
+                
+            
+        
+
+
+  
+    
+    <link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+  
+
+
+      
+    </head>
+    <body>
+
+      
+      <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+      <h1><a href="/www.josephtpowers.com/">post</a></h1>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="/www.josephtpowers.com/">
+                            <i class="fa fa-home">&nbsp;</i>Home
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/www.josephtpowers.com/about/">
+                            <i class="fa fa-id-card-o">&nbsp;</i>About
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/www.josephtpowers.com/blog/">
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/www.josephtpowers.com/itemized/">
+                            <i class="fa fa-list">&nbsp;</i>Itemized
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/www.josephtpowers.com/categories/">
+                            <i class="fa fa-sitemap">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="/www.josephtpowers.com/contact/">
+                            <i class="fa fa-envelope-o">&nbsp;</i>Contact
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="as_sitesearch" value="/www.josephtpowers.com/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="as_sitesearch" value="/www.josephtpowers.com/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="/www.josephtpowers.com/">
+                            <h3>
+                                <i class="fa fa-home">&nbsp;</i>Home
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/www.josephtpowers.com/about/">
+                            <h3>
+                                <i class="fa fa-id-card-o">&nbsp;</i>About
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/www.josephtpowers.com/blog/">
+                            <h3>
+                                <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/www.josephtpowers.com/itemized/">
+                            <h3>
+                                <i class="fa fa-list">&nbsp;</i>Itemized
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/www.josephtpowers.com/categories/">
+                            <h3>
+                                <i class="fa fa-sitemap">&nbsp;</i>Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/www.josephtpowers.com/contact/">
+                            <h3>
+                                <i class="fa fa-envelope-o">&nbsp;</i>Contact
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section class="recent-posts">
+            <div class="mini-posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+
+                
+                    
+                
+
+                
+                        <article class="mini-post">
+                            <header>
+                                <h3><a href="/www.josephtpowers.com/post/build-around-the-limits-of-your-materials/">Build around the limits of your materials</a></h3>
+                                
+                                <time class="published" datetime=
+                                    '2018-03-05'>
+                                    March 5, 2018</time>
+                            </header>
+                            
+
+                        </article>
+                
+                        <article class="mini-post">
+                            <header>
+                                <h3><a href="/www.josephtpowers.com/post/seamless-spreads-and-gathers/">For seamless spreads and gathers, add IDs while data are wide.</a></h3>
+                                
+                                <time class="published" datetime=
+                                    '2018-03-05'>
+                                    March 5, 2018</time>
+                            </header>
+                            
+
+                        </article>
+                
+                        <article class="mini-post">
+                            <header>
+                                <h3><a href="/www.josephtpowers.com/post/grafting/">Grafting</a></h3>
+                                
+                                <time class="published" datetime=
+                                    '2018-02-28'>
+                                    February 28, 2018</time>
+                            </header>
+                            
+
+                        </article>
+                
+                        <article class="mini-post">
+                            <header>
+                                <h3><a href="/www.josephtpowers.com/post/housing-affordability-in-the-bay-area/">Housing Affordability in the Bay Area</a></h3>
+                                
+                                <time class="published" datetime=
+                                    '2018-02-28'>
+                                    February 28, 2018</time>
+                            </header>
+                            
+
+                        </article>
+                
+                        <article class="mini-post">
+                            <header>
+                                <h3><a href="/www.josephtpowers.com/post/spatial-reasoning/">Spatial Reasoning</a></h3>
+                                
+                                <time class="published" datetime=
+                                    '2018-02-28'>
+                                    February 28, 2018</time>
+                            </header>
+                            
+
+                        </article>
+                
+
+                
+                    <a href=
+                        
+                            /blog/
+                        
+                        class="button">View more posts</a>
+                
+            </div>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+
+<li>
+  <a href="//twitter.com/share?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;text=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide.&amp;via=example" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+    </a>
+</li>
+
+
+
+
+<li>
+  <a href="//plus.google.com/share?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+
+
+<li>
+  <a href="//reddit.com/submit?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;title=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;title=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn linkedin">
+      <i class="fa fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;title=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;description=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn pinterest">
+    <i class="fa fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by Joe%20Powers&amp;body=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+  <header>
+    <div class="title">
+        
+            <h1><a href="/www.josephtpowers.com/post/seamless-spreads-and-gathers/">For seamless spreads and gathers, add IDs while data are wide.</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+
+        <time class="published"
+            datetime='2018-03-05'>
+            March 5, 2018</time>
+        <span class="author">Joe Powers</span>
+        
+            <p>6 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+  
+    <section id="social-share">
+      <ul class="icons">
+        
+
+
+
+<li>
+  <a href="//twitter.com/share?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;text=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide.&amp;via=example" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+    </a>
+</li>
+
+
+
+
+<li>
+  <a href="//plus.google.com/share?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+  </a>
+</li>
+
+
+
+
+
+<li>
+  <a href="//www.facebook.com/sharer/sharer.php?u=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+    </a>
+</li>
+
+
+
+
+<li>
+  <a href="//reddit.com/submit?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;title=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+  </a>
+</li>
+
+
+
+
+<li>
+  <a href="//www.linkedin.com/shareArticle?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;title=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn linkedin">
+      <i class="fa fa-linkedin"></i>
+      <p>LinkedIn</p>
+    </a>
+</li>
+
+
+
+
+<li>
+  <a href="//www.stumbleupon.com/submit?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;title=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+  </a>
+</li>
+
+
+
+
+<li>
+  <a href="//www.pinterest.com/pin/create/button/?url=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f&amp;description=For%20seamless%20spreads%20and%20gathers%2c%20add%20IDs%20while%20data%20are%20wide." target="_blank" class="share-btn pinterest">
+    <i class="fa fa-pinterest-p"></i>
+    <p>Pinterest</p>
+  </a>
+</li>
+
+
+
+
+<li>
+  <a href="mailto:?subject=Check out this post by Joe%20Powers&amp;body=%2fwww.josephtpowers.com%2fpost%2fseamless-spreads-and-gathers%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+  </a>
+</li>
+
+
+      </ul>
+    </section>
+  
+
+  
+
+  <div id="content">
+    <p>During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the <code>gather()</code> and <code>spread()</code> functions of <code>tidyr</code>. Sometimes I encounter an error message after trying to <code>spread</code> data that previously <code>gathered</code> without issue: “Error: Duplicate identifiers for rows …”.</p>
+<p>I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.</p>
+<p>Let’s start by taking some familiar data and making it very small for demo purposes. I’ll call the small dataset mt_wide to contrast it with its long form, mt_long, that it will transition to shortly.</p>
+<pre class="r"><code># allow error messages to print in html output
+knitr::opts_chunk$set(error = TRUE)
+
+library(tidyverse)
+library(magrittr)</code></pre>
+<pre class="r"><code>mt_wide &lt;- 
+  mtcars %&gt;% 
+  rownames_to_column(&quot;model&quot;) %&gt;% 
+  filter(str_detect(model, &quot;Fiat|Toyota&quot;)) %&gt;% 
+  select(model, mpg, cyl) %&gt;% 
+  arrange(model)
+
+mt_wide</code></pre>
+<pre><code>##            model  mpg cyl
+## 1       Fiat 128 32.4   4
+## 2      Fiat X1-9 27.3   4
+## 3 Toyota Corolla 33.9   4
+## 4  Toyota Corona 21.5   4</code></pre>
+<p>These data will gather() and spread() seemlessly because there is a unique model value for each row.</p>
+<pre class="r"><code># gather data into long format
+mt_long &lt;- 
+  mt_wide %&gt;% 
+  gather(mpg, cyl, key = measure, value = value)
+
+mt_long</code></pre>
+<pre><code>##            model measure value
+## 1       Fiat 128     mpg  32.4
+## 2      Fiat X1-9     mpg  27.3
+## 3 Toyota Corolla     mpg  33.9
+## 4  Toyota Corona     mpg  21.5
+## 5       Fiat 128     cyl   4.0
+## 6      Fiat X1-9     cyl   4.0
+## 7 Toyota Corolla     cyl   4.0
+## 8  Toyota Corona     cyl   4.0</code></pre>
+<pre class="r"><code># spread long data back to wide format
+mt_wide &lt;- 
+  mt_long %&gt;% 
+  spread(key = measure, value = value)
+
+mt_wide</code></pre>
+<pre><code>##            model cyl  mpg
+## 1       Fiat 128   4 32.4
+## 2      Fiat X1-9   4 27.3
+## 3 Toyota Corolla   4 33.9
+## 4  Toyota Corona   4 21.5</code></pre>
+<p>Likewise these next data will gather() and spread() seemlessly because there is a unique combination of values among the variables not being spread, namely <code>brand</code> and <code>model</code>.</p>
+<pre class="r"><code>mt_wide &lt;- 
+  mt_wide %&gt;% 
+  separate(model, into = c(&quot;brand&quot;, &quot;model&quot;), extra = &quot;merge&quot;) %&gt;%
+  select(brand, model, mpg, cyl) %&gt;% 
+  arrange(brand)
+
+mt_wide</code></pre>
+<pre><code>##    brand   model  mpg cyl
+## 1   Fiat     128 32.4   4
+## 2   Fiat    X1-9 27.3   4
+## 3 Toyota Corolla 33.9   4
+## 4 Toyota  Corona 21.5   4</code></pre>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  gather(mpg, cyl, key = measure, value = value)
+
+mt_long</code></pre>
+<pre><code>##    brand   model measure value
+## 1   Fiat     128     mpg  32.4
+## 2   Fiat    X1-9     mpg  27.3
+## 3 Toyota Corolla     mpg  33.9
+## 4 Toyota  Corona     mpg  21.5
+## 5   Fiat     128     cyl   4.0
+## 6   Fiat    X1-9     cyl   4.0
+## 7 Toyota Corolla     cyl   4.0
+## 8 Toyota  Corona     cyl   4.0</code></pre>
+<pre class="r"><code>mt_wide &lt;- 
+  mt_long %&gt;% 
+  spread(key = measure, value = value)
+
+mt_wide</code></pre>
+<pre><code>##    brand   model cyl  mpg
+## 1   Fiat     128   4 32.4
+## 2   Fiat    X1-9   4 27.3
+## 3 Toyota Corolla   4 33.9
+## 4 Toyota  Corona   4 21.5</code></pre>
+<p>We run into trouble when we lack a means of identifying unique rows. To demonstrate I’ll drop the model variable so that rows lack a unique identifier.</p>
+<pre class="r"><code>mt_wide %&lt;&gt;% 
+  select(-model)
+
+mt_wide</code></pre>
+<pre><code>##    brand cyl  mpg
+## 1   Fiat   4 32.4
+## 2   Fiat   4 27.3
+## 3 Toyota   4 33.9
+## 4 Toyota   4 21.5</code></pre>
+<p>The data <code>gather()</code> just fine …</p>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  gather(mpg, cyl, key = measure, value = value) %&gt;% 
+  arrange(brand)
+
+mt_long</code></pre>
+<pre><code>##    brand measure value
+## 1   Fiat     mpg  32.4
+## 2   Fiat     mpg  27.3
+## 3   Fiat     cyl   4.0
+## 4   Fiat     cyl   4.0
+## 5 Toyota     mpg  33.9
+## 6 Toyota     mpg  21.5
+## 7 Toyota     cyl   4.0
+## 8 Toyota     cyl   4.0</code></pre>
+<p>… but attempts to <code>spread()</code> this data back out to a wide format are not so smooth:</p>
+<pre class="r"><code>mt_wide &lt;- 
+  mt_long %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>## Error: Duplicate identifiers for rows (3, 4), (7, 8), (1, 2), (5, 6)</code></pre>
+<p>This “Error: Duplicate identifiers for rows …”, results from the data lacking unique identifiers to aggregate upon during the spread. For instance, in its current long state, how would the <code>spread()</code> function know which Toyota to associate cylinder and mpg values with? Clearly an additional identifier is needed, but importantly, the identifier needs to have been added or be already present when the data were in their <em>wide</em> format–before you used the <code>gather()</code> function. Adding unique identifiers once the data are in long format is too late.</p>
+<p>This order of operations can be confusing, because while the error message appears when you try to <code>spread()</code> long data, the solution requires you to go back two steps and add unique identifiers while the data are still wide.</p>
+<p>Adding a unique identifier while the data were in wide format allows the data to <code>gather()</code> and <code>spread()</code> seamlessly.</p>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  # add unique identifier
+  mutate(id = 1:n()) %&gt;% 
+  gather(mpg:cyl, key = measure, value = value) 
+
+mt_long</code></pre>
+<pre><code>##    brand id measure value
+## 1   Fiat  1     mpg  32.4
+## 2   Fiat  2     mpg  27.3
+## 3 Toyota  3     mpg  33.9
+## 4 Toyota  4     mpg  21.5
+## 5   Fiat  1     cyl   4.0
+## 6   Fiat  2     cyl   4.0
+## 7 Toyota  3     cyl   4.0
+## 8 Toyota  4     cyl   4.0</code></pre>
+<pre class="r"><code>mt_long %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>##    brand id cyl  mpg
+## 1   Fiat  1   4 32.4
+## 2   Fiat  2   4 27.3
+## 3 Toyota  3   4 33.9
+## 4 Toyota  4   4 21.5</code></pre>
+<div id="unique-identifiers-can-also-be-added-within-groups" class="section level3">
+<h3>Unique identifiers can also be added within groups</h3>
+<pre class="r"><code>mt_long &lt;- 
+  mt_wide %&gt;% 
+  # add unique identifier
+  group_by(brand) %&gt;% 
+    mutate(id = 1:n()) %&gt;% 
+  ungroup() %&gt;% 
+  gather(mpg:cyl, key = measure, value = value) 
+
+mt_long</code></pre>
+<pre><code>## # A tibble: 8 x 4
+##   brand     id measure value
+##   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
+## 1 Fiat       1 mpg     32.4 
+## 2 Fiat       2 mpg     27.3 
+## 3 Toyota     1 mpg     33.9 
+## 4 Toyota     2 mpg     21.5 
+## 5 Fiat       1 cyl      4.00
+## 6 Fiat       2 cyl      4.00
+## 7 Toyota     1 cyl      4.00
+## 8 Toyota     2 cyl      4.00</code></pre>
+<pre class="r"><code>mt_long %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   brand     id   cyl   mpg
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Fiat       1  4.00  32.4
+## 2 Fiat       2  4.00  27.3
+## 3 Toyota     1  4.00  33.9
+## 4 Toyota     2  4.00  21.5</code></pre>
+</div>
+<div id="sparse-data-example" class="section level3">
+<h3>Sparse data example</h3>
+<p>Adding rownumbers after the data are long will enable the <code>spread</code>, but will also result in sparse data, which you don’t want.</p>
+<pre class="r"><code>mt_long %&gt;% 
+  mutate(id = 1:n()) %&gt;% 
+  spread(key = measure, value = value)</code></pre>
+<pre><code>## # A tibble: 8 x 4
+##   brand     id   cyl   mpg
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Fiat       1 NA     32.4
+## 2 Fiat       2 NA     27.3
+## 3 Fiat       5  4.00  NA  
+## 4 Fiat       6  4.00  NA  
+## 5 Toyota     3 NA     33.9
+## 6 Toyota     4 NA     21.5
+## 7 Toyota     7  4.00  NA  
+## 8 Toyota     8  4.00  NA</code></pre>
+</div>
+
+  </div>
+
+  <footer>
+    <ul class="stats">
+  <li class="categories">
+    <ul>
+        
+            
+            
+                <i class="fa fa-folder"></i>
+                
+                
+                <li><a class="article-category-link" href="/www.josephtpowers.com/categories/tidyr">tidyr</a></li>
+                
+            
+        
+    </ul>
+  </li>
+  <li class="tags">
+    <ul>
+        
+            
+            
+                <i class="fa fa-tags"></i>
+                
+                
+                <li><a class="article-category-link" href="/www.josephtpowers.com/tags/separate">separate</a></li>
+                
+                
+                <li><a class="article-category-link" href="/www.josephtpowers.com/tags/gather">gather</a></li>
+                
+                
+                <li><a class="article-category-link" href="/www.josephtpowers.com/tags/tidy-data">tidy data</a></li>
+                
+                
+                <li><a class="article-category-link" href="/www.josephtpowers.com/tags/tidyr">tidyr</a></li>
+                
+            
+        
+    </ul>
+  </li>
+</ul>
+
+  </footer>
+
+</article>
+
+    <article class="post">
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </article>
+
+
+<ul class="actions pagination">
+    
+        <li><a href="/www.josephtpowers.com/post/grafting/"
+                class="button big previous">Grafting</a></li>
+    
+
+    
+        <li><a href="/www.josephtpowers.com/post/build-around-the-limits-of-your-materials/"
+                class="button big next">Build around the limits of your materials</a></li>
+    
+</ul>
+
+
+    </div>
+    
+<section id="sidebar">
+
+  
+  <section id="intro">
+    
+    
+      
+        <a href='/www.josephtpowers.com/' class="logo"><img src="/www.josephtpowers.com/img/main/logo.jpg" alt="Hugo Future Imperfect" /></a>
+      
+    
+    
+      <header>
+        <h2>Joseph T Powers</h2>
+        <p>A website sharing insights and misadventures<br>in the crafts I love.</p>
+      </header>
+    
+    
+      <ul class="icons">
+        
+          
+    <li><a href="/www.josephtpowers.com/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fa fa-rss"></a></li>
+
+
+        
+        
+  <li><a href="//github.com/joepowers16/josephtpowers" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <li><a href="//flickr.com/photos/example" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+  <li><a href="//linkedin.com/in/example" target="_blank" title="LinkedIn" class="fa fa-linkedin"></a></li>
+
+
+
+  <li><a href="//linkedin.com/company/examplebusiness" target="_blank" title="LinkedIn Company" class="fa fa-linkedin"></a></li>
+
+
+
+
+
+
+
+
+
+  <li><a href="//facebook.com/example" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+
+
+  <li><a href="//reddit.com/user/example" target="_blank" title="Reddit" class="fa fa-reddit"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <li><a href="//instagram.com/example" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+  <li><a href="//twitter.com/example" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+
+
+
+
+  <li><a href="//pinterest.com/example" target="_blank" title="Pinterest" class="fa fa-pinterest-p"></a></li>
+
+
+
+  <li><a href="//telegram.me/example" target="_blank" title="telegram" class="fa fa-telegram"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//researchgate.net/profile/example" target="_blank" title="Research Gate"><i class="ai ai-researchgate"></i></a></li>
+
+
+
+  <li><a href="mailto:example" title="Email" class="fa fa-envelope"></a></li>
+
+
+      </ul>
+    
+  </section>
+
+  
+  <section class="recent-posts">
+    <div class="mini-posts">
+      <header>
+        <h3>Recent Posts</h3>
+      </header>
+      <div class="posts-container">
+        
+
+        
+          
+        
+
+        
+          <article class="mini-post">
+            <header>
+              <h3>
+                <a href="/www.josephtpowers.com/post/build-around-the-limits-of-your-materials/">Build around the limits of your materials</a>
+              </h3>
+              
+              <time class="published" datetime='2018-03-05'>
+                March 5, 2018
+              </time>
+            </header>
+            
+
+          </article>
+        
+          <article class="mini-post">
+            <header>
+              <h3>
+                <a href="/www.josephtpowers.com/post/seamless-spreads-and-gathers/">For seamless spreads and gathers, add IDs while data are wide.</a>
+              </h3>
+              
+              <time class="published" datetime='2018-03-05'>
+                March 5, 2018
+              </time>
+            </header>
+            
+
+          </article>
+        
+          <article class="mini-post">
+            <header>
+              <h3>
+                <a href="/www.josephtpowers.com/post/grafting/">Grafting</a>
+              </h3>
+              
+              <time class="published" datetime='2018-02-28'>
+                February 28, 2018
+              </time>
+            </header>
+            
+
+          </article>
+        
+          <article class="mini-post">
+            <header>
+              <h3>
+                <a href="/www.josephtpowers.com/post/housing-affordability-in-the-bay-area/">Housing Affordability in the Bay Area</a>
+              </h3>
+              
+              <time class="published" datetime='2018-02-28'>
+                February 28, 2018
+              </time>
+            </header>
+            
+
+          </article>
+        
+          <article class="mini-post">
+            <header>
+              <h3>
+                <a href="/www.josephtpowers.com/post/spatial-reasoning/">Spatial Reasoning</a>
+              </h3>
+              
+              <time class="published" datetime='2018-02-28'>
+                February 28, 2018
+              </time>
+            </header>
+            
+
+          </article>
+        
+      </div>
+
+      
+        <a href=
+          
+            /blog/
+          
+        class="button">View more posts</a>
+      
+    </div>
+  </section>
+
+  
+  
+  
+  
+  
+    <section id="categories">
+      <header>
+        <h3>
+          <a href="/categories/">Categories</a>
+        </h3>
+      </header>
+        
+          
+        
+
+        
+        <p>
+          <article>
+            <header>
+              
+                Uncategorized
+                <span style="float:right;">4</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/r/">R</a>
+                <span style="float:right;">4</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/hugo/">Hugo</a>
+                <span style="float:right;">3</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/go/">Go</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/jekyll/">Jekyll</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/r-geom_sf/">R geom_sf</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/data-science/">data science</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/dpylr/">dpylr</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/left_join/">left_join</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/maps/">maps</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/merge/">merge</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+        <p>
+          <article>
+            <header>
+              
+                <a href="/categories/tidyr/">tidyr</a>
+                <span style="float:right;">1</span>
+              
+            </header>
+          </article>
+        </p>
+        
+    </section>
+  
+  
+
+  
+  
+    <section id="mini-bio">
+      <h3>About</h3>
+      <p>I am a data science in People Analytics at Genentech. In my free time I am an avid furniture maker and cook.</p>
+      <a href="/about/" class="button">Learn More</a>
+    </section>
+  
+
+  
+  <section id="footer">
+    
+      <ul class="icons">
+        
+          
+    <li><a href="/www.josephtpowers.com/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fa fa-rss"></a></li>
+
+
+        
+        
+  <li><a href="//github.com/joepowers16/josephtpowers" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <li><a href="//flickr.com/photos/example" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+  <li><a href="//linkedin.com/in/example" target="_blank" title="LinkedIn" class="fa fa-linkedin"></a></li>
+
+
+
+  <li><a href="//linkedin.com/company/examplebusiness" target="_blank" title="LinkedIn Company" class="fa fa-linkedin"></a></li>
+
+
+
+
+
+
+
+
+
+  <li><a href="//facebook.com/example" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+
+
+  <li><a href="//reddit.com/user/example" target="_blank" title="Reddit" class="fa fa-reddit"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <li><a href="//instagram.com/example" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+  <li><a href="//twitter.com/example" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+
+
+
+
+  <li><a href="//pinterest.com/example" target="_blank" title="Pinterest" class="fa fa-pinterest-p"></a></li>
+
+
+
+  <li><a href="//telegram.me/example" target="_blank" title="telegram" class="fa fa-telegram"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//researchgate.net/profile/example" target="_blank" title="Research Gate"><i class="ai ai-researchgate"></i></a></li>
+
+
+
+  <li><a href="mailto:example" title="Email" class="fa fa-envelope"></a></li>
+
+
+      </ul>
+    
+    <p class="copyright">
+      
+        &copy; 2018
+        
+          Data Sciencing, Woodworking, and Cooking
+        
+      .
+      Powered by <a href="//gohugo.io" target="_blank">Hugo</a>
+    </p>
+  </section>
+</section>
+
+    </div>
+    <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+    
+
+    
+      
+    
+
+    
+      
+      
+      
+        <script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+        
+        
+        
+        <script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+        <script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+        <script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/css.min.js"></script>
+        <script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+      
+    
+    
+    
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/skel/3.0.1/skel.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
+      <script src="/www.josephtpowers.com/js/util.js"></script>
+      <script src="/www.josephtpowers.com/js/main.js"></script>
+      <script src="/www.josephtpowers.com/js/backToTop.js"></script>
+    
+
+    
+      
+        
+      
+    
+
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+      <script src="//yihui.name/js/math-code.js"></script>
+<script async
+src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+  </body>
+</html>
+

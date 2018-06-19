@@ -1,0 +1,8 @@
+---
+title: "woRkflow"
+author: "Joe Powers"
+date: "4/8/2018"
+output: html_document
+---
+
+This could be a series of posts relating to workflwo in R. Start with your makefiles. But also touch on iterative breakup of munge and analysis. 

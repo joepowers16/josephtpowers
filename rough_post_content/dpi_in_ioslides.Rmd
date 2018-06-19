@@ -1,0 +1,33 @@
+---
+title: "Figure size is responsive to dpi settings"
+author: "Joe Powers"
+date: "3/5/2018"
+output: 
+  ioslides_presentation:
+    widescreen: true
+    fig_width: 6
+    fig_height: 4
+---
+
+```{r packages, include=FALSE, message=FALSE}
+library(knitr)  
+library(tidyverse)
+```
+
+## Chunk option: default dpi
+
+```{r include=TRUE, echo=FALSE, fig.align="center"}
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg, color = am)) + 
+    geom_smooth(method = "lm") +
+    theme_minimal() 
+```
+
+## Chunk option: dpi = 300
+
+```{r include=TRUE, echo=FALSE, dpi=300}
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg, color = am)) + 
+    geom_smooth(method = "lm") +
+    theme_minimal() 
+```

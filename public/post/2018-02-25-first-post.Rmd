@@ -1,0 +1,24 @@
+---
+title: First post
+author: Joe Powers
+date: '2018-02-25'
+slug: first-post
+categories:
+  - R
+tags:
+  - geom_sf
+  - maps
+---
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+```{r}
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg)) + 
+    geom_point() + 
+    geom_smooth()
+```
+
+
