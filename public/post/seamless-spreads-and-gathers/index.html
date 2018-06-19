@@ -10,7 +10,7 @@
 
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="generator" content="Hugo 0.36.1" />
+        <meta name="generator" content="Hugo 0.42.1" />
         
 
 
@@ -25,15 +25,15 @@
 
         <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="For seamless spreads and gathers, add IDs while data are wide."/>
-<meta name="twitter:description" content="During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr. Sometimes I encounter an error message after trying to spread data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
-I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.
-Let’s start by taking some familiar data and making it very small for demo purposes."/>
+<meta name="twitter:description" content="knitr::opts_chunk$set(error = TRUE) library(tidyverse) library(magrittr) During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr.
+Frequently I would encounter this error message after trying to spread some data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
+I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it."/>
 <meta name="twitter:site" content="@example"/>
 
         <meta property="og:title" content="For seamless spreads and gathers, add IDs while data are wide." />
-<meta property="og:description" content="During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr. Sometimes I encounter an error message after trying to spread data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
-I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.
-Let’s start by taking some familiar data and making it very small for demo purposes." />
+<meta property="og:description" content="knitr::opts_chunk$set(error = TRUE) library(tidyverse) library(magrittr) During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr.
+Frequently I would encounter this error message after trying to spread some data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
+I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/www.josephtpowers.com/post/seamless-spreads-and-gathers/" />
 
@@ -59,14 +59,14 @@ Let’s start by taking some familiar data and making it very small for demo pur
         <meta property="og:image:height" content="512">
         
 <meta itemprop="name" content="For seamless spreads and gathers, add IDs while data are wide.">
-<meta itemprop="description" content="During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr. Sometimes I encounter an error message after trying to spread data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
-I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.
-Let’s start by taking some familiar data and making it very small for demo purposes.">
+<meta itemprop="description" content="knitr::opts_chunk$set(error = TRUE) library(tidyverse) library(magrittr) During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr.
+Frequently I would encounter this error message after trying to spread some data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
+I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.">
 
 
 <meta itemprop="datePublished" content="2018-03-05T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-03-05T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1141">
+<meta itemprop="wordCount" content="1134">
 
 
 
@@ -546,14 +546,13 @@ Let’s start by taking some familiar data and making it very small for demo pur
   
 
   <div id="content">
-    <p>During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the <code>gather()</code> and <code>spread()</code> functions of <code>tidyr</code>. Sometimes I encounter an error message after trying to <code>spread</code> data that previously <code>gathered</code> without issue: “Error: Duplicate identifiers for rows …”.</p>
-<p>I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.</p>
-<p>Let’s start by taking some familiar data and making it very small for demo purposes. I’ll call the small dataset mt_wide to contrast it with its long form, mt_long, that it will transition to shortly.</p>
-<pre class="r"><code># allow error messages to print in html output
-knitr::opts_chunk$set(error = TRUE)
-
-library(tidyverse)
+    <pre class="r"><code>knitr::opts_chunk$set(error = TRUE)</code></pre>
+<pre class="r"><code>library(tidyverse)
 library(magrittr)</code></pre>
+<p>During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the <code>gather()</code> and <code>spread()</code> functions of <code>tidyr</code>.</p>
+<p>Frequently I would encounter this error message after trying to <code>spread</code> some data that previously <code>gathered</code> without issue: “Error: Duplicate identifiers for rows …”.</p>
+<p>I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.</p>
+<p>Let’s start by taking some familiar data and making it very small for demo purposes. I’ll call the small dataset mt_wide to contrast it with its long form, mt_long that it will transition to shortly.</p>
 <pre class="r"><code>mt_wide &lt;- 
   mtcars %&gt;% 
   rownames_to_column(&quot;model&quot;) %&gt;% 
@@ -838,7 +837,7 @@ mt_long</code></pre>
     
       <header>
         <h2>Joseph T Powers</h2>
-        <p>A website sharing insights and misadventures<br>in the crafts I love.</p>
+        <p>Misadventures in data science.</p>
       </header>
     
     

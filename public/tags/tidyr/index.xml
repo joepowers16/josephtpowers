@@ -17,9 +17,9 @@
       <pubDate>Mon, 05 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/www.josephtpowers.com/post/seamless-spreads-and-gathers/</guid>
-      <description>During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr. Sometimes I encounter an error message after trying to spread data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
-I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.
-Let’s start by taking some familiar data and making it very small for demo purposes.</description>
+      <description>knitr::opts_chunk$set(error = TRUE) library(tidyverse) library(magrittr) During a typical data munge I will frequenly transition a dataset back and forth between long and wide formats by using the gather() and spread() functions of tidyr.
+Frequently I would encounter this error message after trying to spread some data that previously gathered without issue: “Error: Duplicate identifiers for rows …”.
+I’ll attempt to clarify the conditions that give rise to this error so that you can resolve it.</description>
     </item>
     
   </channel>

@@ -86,7 +86,7 @@ pluralizeListTitles = false
 [params.intro]
   header    = "Joseph T Powers"
 
-  paragraph = "A website sharing insights and misadventures<br>in the crafts I love."
+  paragraph = "Misadventures in data science."
 
   about     = "I am a data science in People Analytics at Genentech. In my free time I am an avid furniture maker and cook."
 

@@ -3,6 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/www.josephtpowers.com/post/build-around-the-limits-of-your-materials/</loc>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/post/seamless-spreads-and-gathers/</loc>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/post/grafting/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/post/housing-affordability-in-the-bay-area/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/post/spatial-reasoning/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/post/testing-with-small-data/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/www.josephtpowers.com/post/first-post/</loc>
     <lastmod>2018-02-25T00:00:00+00:00</lastmod>
   </url>
@@ -81,7 +111,30 @@
   
   <url>
     <loc>/www.josephtpowers.com/</loc>
-    <lastmod>2018-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/categories/data-science/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/categories/dpylr/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/drafts/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/tags/gather/</loc>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -116,8 +169,26 @@
   </url>
   
   <url>
+    <loc>/www.josephtpowers.com/categories/left_join/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/www.josephtpowers.com/tags/maps/</loc>
     <lastmod>2018-02-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/categories/maps/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/categories/merge/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -129,13 +200,13 @@
   
   <url>
     <loc>/www.josephtpowers.com/post/</loc>
-    <lastmod>2018-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/www.josephtpowers.com/categories/r/</loc>
-    <lastmod>2018-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -146,14 +217,48 @@
   </url>
   
   <url>
+    <loc>/www.josephtpowers.com/categories/r-geom_sf/</loc>
+    <lastmod>2018-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/www.josephtpowers.com/tags/regression/</loc>
     <lastmod>2015-07-23T21:13:14-05:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>/www.josephtpowers.com/tags/separate/</loc>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/drafts/spreading_sparsity/</loc>
+  </url>
+  
+  <url>
     <loc>/www.josephtpowers.com/tags/</loc>
-    <lastmod>2018-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/tags/tidy-data/</loc>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/tags/tidyr/</loc>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/www.josephtpowers.com/categories/tidyr/</loc>
+    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

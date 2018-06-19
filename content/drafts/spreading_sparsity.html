@@ -1,0 +1,101 @@
+---
+title: "Spreading sparsity demo"
+author: "Joe Powers"
+date: "3/9/2018"
+output: html_document
+---
+
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 2.2.1     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.5
+## ✔ tidyr   0.8.0     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(magrittr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<p>Github example:</p>
+<pre class="r"><code>mpgs &lt;- 
+  mpg %&gt;% 
+  group_by(model) %&gt;% 
+    arrange(year) %&gt;% 
+    slice(1) %&gt;% 
+  ungroup() %&gt;% 
+  arrange(trans) %&gt;% 
+  slice(1:2) %&gt;% 
+  select(model, cyl, displ, year)</code></pre>
+<pre class="r"><code># clean gather/spread with all vars
+mpgs %&gt;% 
+  gather(cyl:year, key = item, value = measure) %&gt;% 
+  spread(key = item, value = measure)</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   model         cyl displ  year
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 caravan 2wd     4   2.4  1999
+## 2 corolla         4   1.8  1999</code></pre>
+<pre class="r"><code># clean gather/spread: in this case the ungathered var does not casuse a problem
+mpgs %&gt;% 
+  gather(cyl:displ, key = item, value = measure) %&gt;% 
+  spread(key = item, value = measure)</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   model        year   cyl displ
+##   &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 caravan 2wd  1999     4   2.4
+## 2 corolla      1999     4   1.8</code></pre>
+<pre class="r"><code># Even when a uniform vs varied variable are excluded it still works. 
+mpg %&gt;% 
+  group_by(model) %&gt;% 
+    arrange(year) %&gt;% 
+    slice(1) %&gt;% 
+  ungroup() %&gt;% 
+  arrange(trans) %&gt;% 
+  slice(1:2) %&gt;% 
+  select(model, cyl, displ, year, hwy) %&gt;% 
+  gather(cyl:displ, key = item, value = measure) %&gt;% 
+  spread(key = item, value = measure)</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##   model        year   hwy   cyl displ
+##   &lt;chr&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 caravan 2wd  1999    24     4   2.4
+## 2 corolla      1999    30     4   1.8</code></pre>
+<p>What makes my data go sparse?</p>
+<pre class="r"><code># mpg %&gt;% 
+#   spread(key = date_type, value = comparatio) %&gt;% 
+#   select(case_id, yr.qtr_pre:yr.qtr_q12, sal_midpt_pre) 
+  # so the sparsity is introduced by the spread()</code></pre>
+<pre class="r"><code># What variable triggers a sparse spread? yr.qtr. Why? b/c...
+# mpg %&gt;% 
+#   select(case_id, date_type, comparatio, yr.qtr) %&gt;% 
+#   spread(key = date_type, value = comparatio) %&gt;% 
+#   nrow()</code></pre>
+<pre class="r"><code># yr.qtr has a unque value for each row, so it cannot aggregate into a single value per each condensed row. 
+# mpg %&gt;% 
+#   select(case_id, date_type, comparatio, yr.qtr) %&gt;% 
+#   spread(key = date_type, value = comparatio) </code></pre>
+<p>Spread() will introduce sparsity unless all variables <em>not</em> being spread are constant within the level of aggregation.</p>
+<p>How does spread() know what the level of aggregation is for starters?</p>
+<pre class="r"><code># dss &lt;- mpg %&gt;% 
+#   filter(
+#     case_id %in% c(&quot;c_1&quot;, &quot;c_2&quot;),
+#     date_type %in% c(&quot;yr.qtr_pre&quot;, &quot;yr.qtr_q4&quot;)
+#   ) %&gt;% 
+#   select(case_id, date_type, comparatio, yr.qtr, sal_midpt_pre) </code></pre>
+<pre class="r"><code># Sparse spread disaster
+# dss %&gt;% 
+#   select(-sal_midpt_pre) %&gt;% 
+#   spread(key = date_type, value = comparatio) </code></pre>
+<pre class="r"><code># clean spread
+# dss %&gt;% 
+#   select(-yr.qtr) %&gt;% 
+#   spread(key = date_type, value = comparatio) </code></pre>

@@ -53,49 +53,49 @@ mpg %>%
 
 What makes my data go sparse? 
 ```{r}
-ds %>% 
-  spread(key = date_type, value = comparatio) %>% 
-  select(case_id, yr.qtr_pre:yr.qtr_q12, sal_midpt_pre) 
+# mpg %>% 
+#   spread(key = date_type, value = comparatio) %>% 
+#   select(case_id, yr.qtr_pre:yr.qtr_q12, sal_midpt_pre) 
   # so the sparsity is introduced by the spread()
 ```
 
 ```{r}
 # What variable triggers a sparse spread? yr.qtr. Why? b/c...
-ds %>% 
-  select(case_id, date_type, comparatio, yr.qtr) %>% 
-  spread(key = date_type, value = comparatio) %>% 
-  nrow()
+# mpg %>% 
+#   select(case_id, date_type, comparatio, yr.qtr) %>% 
+#   spread(key = date_type, value = comparatio) %>% 
+#   nrow()
 ```
 
 ```{r}
 # yr.qtr has a unque value for each row, so it cannot aggregate into a single value per each condensed row. 
-ds %>% 
-  select(case_id, date_type, comparatio, yr.qtr) %>% 
-  spread(key = date_type, value = comparatio) 
+# mpg %>% 
+#   select(case_id, date_type, comparatio, yr.qtr) %>% 
+#   spread(key = date_type, value = comparatio) 
 ```
 
 Spread() will introduce sparsity unless all variables *not* being spread are constant within the level of aggregation. 
 
 How does spread() know what the level of aggregation is for starters? 
 ```{r}
-dss <- ds %>% 
-  filter(
-    case_id %in% c("c_1", "c_2"),
-    date_type %in% c("yr.qtr_pre", "yr.qtr_q4")
-  ) %>% 
-  select(case_id, date_type, comparatio, yr.qtr, sal_midpt_pre) 
+# dss <- mpg %>% 
+#   filter(
+#     case_id %in% c("c_1", "c_2"),
+#     date_type %in% c("yr.qtr_pre", "yr.qtr_q4")
+#   ) %>% 
+#   select(case_id, date_type, comparatio, yr.qtr, sal_midpt_pre) 
 ```
 
 ```{r}
 # Sparse spread disaster
-dss %>% 
-  select(-sal_midpt_pre) %>% 
-  spread(key = date_type, value = comparatio) 
+# dss %>% 
+#   select(-sal_midpt_pre) %>% 
+#   spread(key = date_type, value = comparatio) 
 ```
 
 ```{r}
 # clean spread
-dss %>% 
-  select(-yr.qtr) %>% 
-  spread(key = date_type, value = comparatio) 
+# dss %>% 
+#   select(-yr.qtr) %>% 
+#   spread(key = date_type, value = comparatio) 
 ```
