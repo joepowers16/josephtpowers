@@ -169,23 +169,23 @@ mt_long</code></pre>
 <pre><code>## # A tibble: 8 x 4
 ##   brand     id measure value
 ##   &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;
-## 1 Fiat       1 mpg     32.4 
-## 2 Fiat       2 mpg     27.3 
-## 3 Toyota     1 mpg     33.9 
-## 4 Toyota     2 mpg     21.5 
-## 5 Fiat       1 cyl      4.00
-## 6 Fiat       2 cyl      4.00
-## 7 Toyota     1 cyl      4.00
-## 8 Toyota     2 cyl      4.00</code></pre>
+## 1 Fiat       1 mpg      32.4
+## 2 Fiat       2 mpg      27.3
+## 3 Toyota     1 mpg      33.9
+## 4 Toyota     2 mpg      21.5
+## 5 Fiat       1 cyl       4  
+## 6 Fiat       2 cyl       4  
+## 7 Toyota     1 cyl       4  
+## 8 Toyota     2 cyl       4</code></pre>
 <pre class="r"><code>mt_long %&gt;% 
   spread(key = measure, value = value)</code></pre>
 <pre><code>## # A tibble: 4 x 4
 ##   brand     id   cyl   mpg
 ##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 Fiat       1  4.00  32.4
-## 2 Fiat       2  4.00  27.3
-## 3 Toyota     1  4.00  33.9
-## 4 Toyota     2  4.00  21.5</code></pre>
+## 1 Fiat       1     4  32.4
+## 2 Fiat       2     4  27.3
+## 3 Toyota     1     4  33.9
+## 4 Toyota     2     4  21.5</code></pre>
 </div>
 <div id="sparse-data-example" class="section level3">
 <h3>Sparse data example</h3>
@@ -196,12 +196,12 @@ mt_long</code></pre>
 <pre><code>## # A tibble: 8 x 4
 ##   brand     id   cyl   mpg
 ##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 Fiat       1 NA     32.4
-## 2 Fiat       2 NA     27.3
-## 3 Fiat       5  4.00  NA  
-## 4 Fiat       6  4.00  NA  
-## 5 Toyota     3 NA     33.9
-## 6 Toyota     4 NA     21.5
-## 7 Toyota     7  4.00  NA  
-## 8 Toyota     8  4.00  NA</code></pre>
+## 1 Fiat       1    NA  32.4
+## 2 Fiat       2    NA  27.3
+## 3 Fiat       5     4  NA  
+## 4 Fiat       6     4  NA  
+## 5 Toyota     3    NA  33.9
+## 6 Toyota     4    NA  21.5
+## 7 Toyota     7     4  NA  
+## 8 Toyota     8     4  NA</code></pre>
 </div>
