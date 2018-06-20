@@ -1,9 +1,0 @@
----
-title: Testing with small data
-author: Joe Powers
-date: '2018-02-28'
-slug: testing-with-small-data
-categories: []
-tags: []
----
-
